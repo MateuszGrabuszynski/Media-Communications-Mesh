@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "mcm.h"
 #include "mcm_dp.h"
 #include "mesh_dp.h"
@@ -31,28 +32,32 @@ int mcm_send_video_frame(MeshConnection *connection, MeshClient *client, FILE* f
     printf("%d frames to send\n", num_of_frames);
     fseek(file, 0, SEEK_SET);
 
-    for(int i = 0 ; i < num_of_frames; i++){
+    for(int i = 0 ; i < 500; i++){
         MeshBuffer *buf;
 
+        printf("Getting a buffer\n");
         /* Ask the mesh to allocate a shared memory buffer for user data */
         err = mesh_get_buffer(connection, &buf);
         if (err) {
             printf("Failed to get buffer: %s (%d)\n", mesh_err2str(err), err);
         }
+        printf("Buffer fetched %lu\n", buf->payload_len);
         /* get next chunk data, move pointer to the next chunk start */
-        unsigned char *temp_buf = file_buf + (i * buf->payload_len);
-        // unsigned char *temp_buf = file_buf;
+        // unsigned char *temp_buf = file_buf + (i * buf->payload_len);
+        unsigned char *temp_buf = file_buf;
 
         /* clear mesh buffer payload space */
         // memset(buf->payload_ptr, FIRST_INDEX, buf->payload_len);
         /* copy frame_buf data into mesh buffer */
-        // memcpy(buf->payload_ptr, temp_buf, buf->payload_len);
+        memcpy(buf->payload_ptr, temp_buf, buf->payload_len);
         printf("sending %d  frame \n", i+1);
         /* Send the buffer */
         err = mesh_put_buffer(&buf);
         if (err) {
             printf("Failed to put buffer: %s (%d)\n", mesh_err2str(err), err);
         }
+        printf("Before usleep\n");
+        usleep(40000);
     }
     free(file_buf);
     fclose(file);

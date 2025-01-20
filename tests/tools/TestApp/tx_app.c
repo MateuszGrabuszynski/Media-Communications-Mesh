@@ -53,5 +53,8 @@ int main(int argc, char** argv){
     FILE *frame = fopen(frame_file, "rb");
     mcm_send_video_frame(connection, client, frame);
 
+    mesh_delete_connection(&connection);
+    mesh_delete_client(&client);
+
     return 0;
 }
