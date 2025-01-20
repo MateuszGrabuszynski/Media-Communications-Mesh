@@ -67,7 +67,7 @@ int main(int argc, char* argv[]){
             printf("Failed to get buffer: %s (%d)\n", mesh_err2str(err), err);
             break;
         }
-        printf("Received buf of %li B length\n", buf->payload_len);
+        printf("Received buf of %lu B length\n", buf->payload_len);
         /* Process the received user data */
         // buffer_to_file(file, buf);
         // fwrite(buf->data, buf->data_len, 1, out);
@@ -83,7 +83,7 @@ int main(int argc, char* argv[]){
         }
         printf("Released the buffer buf of %li B length\n", buf->payload_len);
 
-        printf("Frame: %i", frame+1);
+        printf("Frame: %d\n", frame+1);
         frame++;
     }
     mesh_delete_connection(&connection);
