@@ -81,7 +81,6 @@ int main(int argc, char* argv[]){
             printf("Failed to put buffer: %s (%d)\n", mesh_err2str(err), err);
             break;
         }
-        printf("Released the buffer buf of %li B length\n", buf->payload_len);
 
         printf("Frame: %d\n", frame+1);
         frame++;
